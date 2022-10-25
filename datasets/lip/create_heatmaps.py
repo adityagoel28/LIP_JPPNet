@@ -6,6 +6,7 @@ import numpy as np
 from scipy.stats import multivariate_normal
 import scipy.io as sio 
 import csv
+import imageio
 
 csv_file = 'lip_train_set.csv'
 
@@ -14,10 +15,10 @@ with open(csv_file, "r") as input_file:
     for row in csv.reader(input_file):
 
         img_id = row.pop(0)[:-4]
-        print img_id
+        print(img_id)
         
-        image_path = './images/{}.jpg'.format(img_id)
-        img = scipy.misc.imread(image_path).astype(np.float)
+        image_path = './images/{}.png'.format(img_id)
+        img = imageio.imread(image_path).astype(np.float)
         rows = img.shape[0]
         cols = img.shape[1]
         heatmap_ = np.zeros((rows, cols, 16), dtype=np.float64)
@@ -39,9 +40,9 @@ with open(csv_file, "r") as input_file:
                     r1 = min(r_+25, rows-1)
                     l2 = max(c_-25, 0)
                     r2 = min(c_+25, cols-1)
-                    for i in xrange(l1, r1):
-                        for j in xrange(l2, r2):
+                    for i in range(l1, r1):
+                        for j in range(l2, r2):
                             heatmap_[i, j, int(idx / 3)] = var.pdf([i, j]) * 400
                 save_path = './heatmap/{}_{}.png'.format(img_id, int(idx/3))
-                scipy.misc.imsave(save_path, heatmap_[:,:,int(idx/3)])
+                imageio.imwrite(save_path, heatmap_[:,:,int(idx/3)])
         heatsum_ = np.sum(heatmap_, axis=2)

@@ -182,7 +182,7 @@ def read_images_from_disk(input_queue, input_size, random_scale, random_mirror=F
 
     pose_id = input_queue[3]
     pose = []
-    for i in xrange(NUM_POSE):
+    for i in range(NUM_POSE):
         pose_contents = tf.read_file(pose_id+'_{}.png'.format(i))
         pose_i = tf.image.decode_png(pose_contents, channels=1)
         pose.append(pose_i)
